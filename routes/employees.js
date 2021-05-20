@@ -4,8 +4,9 @@ const Employees = require("../models/Employees");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 const { body, validationResult } = require("express-validator");
+const Comments = require("../models/Comments");
 
-// Display add gig form
+// Display add employee form
 router.get("/add", (req, res) => res.render("addEmployee"));
 
 // Add an employee
@@ -28,15 +29,14 @@ router.post(
       }
 
       // Insert employees record
-      const newEmployee = await Employees.create({
+      await Employees.create({
         name,
         job_title,
         department,
         line_manager,
         date_joined,
       });
-      res.json(newEmployee);
-      res.redirect("/employees/add");
+      res.redirect("/");
     } catch (error) {
       throw new Error(
         `Something went wrong while inserting employee record: ${error}`
@@ -112,17 +112,17 @@ router.get("/search/all", async (req, res) => {
   // Make first letter uppercase, since we're searching by name
   const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1);
 
-  const hitResultsArr = await Employees.findAll({
+  const employees = await Employees.findAll({
     where: {
       name: { [Op.like]: "%" + nameCapitalized + "%" },
     },
+    raw: true,
   });
 
-  if (hitResultsArr.length > 0) {
-    res.json(hitResultsArr);
+  if (employees.length > 0) {
+    res.render("employees", { employees });
   } else {
-    res.status(404).json({ msg: "No search results found." });
-  }
+    res.render("employees", { employees });  }
 });
 
 // Delete employee

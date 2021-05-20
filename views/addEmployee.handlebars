@@ -1,0 +1,31 @@
+<section id="add" class="container">
+    <div class="form-wrap">
+      <h1>Add new employee</h1>
+      <p>Enter your employee information</p>
+      <form action="/employees/add" method="POST">
+        <div class="input-group">
+          <label for="name">Name</label>
+          <input type="text" name="name" id="name" class="input-box" placeholder="Employee name"
+            maxlength="100" value={{name}}>
+        </div>
+        <div class="input-group">
+          <label for="job_title">Job Title</label>
+          <input type="text" name="job_title" id="job_title" class="input-box" placeholder="Job Title"
+          maxlength="100" value={{job_title}}>
+        </div>
+        <div class="input-group">
+          <label for="department">Department</label>
+          <input type="text" name="department" id="department" class="input-box" placeholder="Department" value={{department}}>
+        </div>
+        <div class="input-group">
+          <label for="line_manager">Line Manager</label>
+          <input type="text" name="line_manager" id="line_manager" class="input-box" placeholder="Line Manager" value={{line_manager}}>
+        </div>
+        <div class="input-group">
+          <label for="date_joined">Date Joined</label>
+          <input type="date" name="date_joined" id="date_joined" class="input-box" placeholder="Enter date" value={{date_joined}}>
+        </div>
+        <input type="submit" value="Add Employee" class="btn btn-reverse">
+      </form>
+    </div>
+  </section>

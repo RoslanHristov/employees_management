@@ -1,0 +1,28 @@
+<section id="comments" class="container">
+    <h1>All comments</h1>
+
+    {{#each comments}}
+      <div class="comment">
+      <h3>Auhtor: {{author}}</h3>
+      <p>Comment: {{comment_content}}</p>
+      <p>Employe: {{employee_name}}</p>
+      <button style="color: red; font-weight: bold;" onclick="sendDelete(event, {{id}})">Delete Comment</a>
+    </div>
+    {{else}}
+      <p>No comments available</p>
+    {{/each}}
+    
+  </section>
+
+<script>
+  function sendDelete(event, id) {
+    var xmlhttp = new XMLHttpRequest(),
+       method = 'DELETE',
+       url = `http://localhost:5000/comments/${id}`;
+       xmlhttp.open(method, url, true);
+       xmlhttp.onload = function () {
+       location.reload()
+      };
+     xmlhttp.send();
+    }
+</script>

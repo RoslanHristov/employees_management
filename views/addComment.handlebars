@@ -1,0 +1,21 @@
+<section id="add" class="container">
+    <div class="form-wrap">
+      <h1>Add a new comment to employee record</h1>
+      <form action="/comments/add" method="POST">
+        <div class="input-group">
+          <label for="comment_content">Comment</label>
+          <input type="text" name="comment_content" id="comment_content" class="input-box" placeholder="Leave your comment..."
+            maxlength="100" value={{comment_content}}>
+        </div>
+        <div class="input-group">
+          <label for="author">Author</label>
+          <input type="text" name="author" id="author" class="input-box" placeholder="Author..." value={{author}}>
+        </div>
+        <div class="input-group">
+          <label for="employee_name">Employee name</label>
+          <input type="text" name="employee_name" id="employee_name" class="input-box" placeholder="Employee name..." value={{employee_name}}>
+        </div>
+        <input type="submit" value="Add Comment" class="btn btn-reverse">
+      </form>
+    </div>
+  </section>

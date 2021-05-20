@@ -1,0 +1,19 @@
+<section id="employees" class="container">
+    <h1>Employees</h1>
+
+    {{#each employees}}
+      <div class="employee">
+      <h3>Name: {{name}}</h3>
+      <p>Job title: {{job_title}}</p>
+      <p>Department:{{department}}</p>
+      <p>Line manager:{{line_manager}}</p>
+      <p>Date joined:{{date_joined}}</p>
+      <a style="color: green; font-weight: bold;" " href='/comments/employee/{{id}}'>Go to comments</a>
+       
+       </form>
+    </div>
+    {{else}}
+      <p>No employees found</p>
+    {{/each}}
+    
+  </section>

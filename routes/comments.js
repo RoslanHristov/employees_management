@@ -103,8 +103,7 @@ router.get("/", async (req, res) => {
   const comments = await Comments.findAll({
     raw: true,
   });
-  res.json(comments);
-  // res.render("comments", { comments });
+  res.render("comments", { comments });
 });
 
 /**

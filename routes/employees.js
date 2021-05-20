@@ -6,10 +6,19 @@ const Op = Sequelize.Op;
 const { body, validationResult } = require("express-validator");
 const Comments = require("../models/Comments");
 
-// Display add employee form
+/**
+ * Display add employee form
+ */
 router.get("/add", (req, res) => res.render("addEmployee"));
 
-// Add an employee
+/**
+ * Add employee
+ * @param {string} name
+ * @param {string} job_title
+ * @param {string} department
+ * @param {string} line_manager
+ * @param {Date} date_joined
+ */
 router.post(
   "/add",
   body(
@@ -45,7 +54,14 @@ router.post(
   }
 );
 
-// Update an employee
+/**
+ * Update employee record (excutable only trough API)
+ * @param {string} name
+ * @param {string} job_title
+ * @param {string} department
+ * @param {string} line_manager
+ * @param {Date} date_joined
+ */
 router.put(
   "/:id",
   body(
@@ -87,7 +103,9 @@ router.put(
   }
 );
 
-// Get employees list
+/**
+ * Get employees list
+ */
 router.get("/", async (req, res) => {
   const employees = await Employees.findAll();
   if (employees.length > 0) {
@@ -96,7 +114,10 @@ router.get("/", async (req, res) => {
   res.status(404).json({ msg: "No employees found." });
 });
 
-// Get employee by id
+/**
+ * Get employee by id
+ * @param {number} id
+ */
 router.get("/:id", async (req, res) => {
   const id = req.params.id;
   const employee = await Employees.findByPk(id);
@@ -106,7 +127,9 @@ router.get("/:id", async (req, res) => {
   res.status(404).json({ msg: "Employee not found." });
 });
 
-// Search for employee
+/**
+ * Search employees by name
+ */
 router.get("/search/all", async (req, res) => {
   let { name } = req.query;
   // Make first letter uppercase, since we're searching by name
@@ -122,10 +145,14 @@ router.get("/search/all", async (req, res) => {
   if (employees.length > 0) {
     res.render("employees", { employees });
   } else {
-    res.render("employees", { employees });  }
+    res.render("employees", { employees });
+  }
 });
 
-// Delete employee
+/**
+ * Delete employee by id
+ * @param {number} id
+ */
 router.delete("/:id", async (req, res) => {
   const id = req.params.id;
   const employee = await Employees.findByPk(id);

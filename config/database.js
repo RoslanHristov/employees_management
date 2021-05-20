@@ -1,9 +1,11 @@
 require("dotenv").config();
 const Sequelize = require("sequelize");
 
-// Add connection string in .env file in the following format
-// Example: postgres://user:password@localhost:5432/db
-// (db name - management_sys)
+/**
+ * Add connection string in .env file in the following format
+ * Example: postgres://user:password@localhost:5432/db
+ * (db name - management_sys)
+ */
 module.exports = new Sequelize(process.env.DB_CONNECTION_STRING, {
   host: "localhost",
   dialect: "postgres",

@@ -3,28 +3,45 @@ const exphbs = require('express-handlebars');
 const path = require('path');
 const db = require('./config/database');
 
-// Test DB
+/**
+ * Initialize database
+ */
 db.authenticate()
   .then(() => console.log('Database connected!'))
   .catch(err => console.log('Error: ' + err))
 
 const app = express();
-// Handlebars
+
+/**
+ * Add handlebars template engine for server side rendering
+ */
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
-// Set static folder
+
+/**
+ * Set static folder
+ */ 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(express.json()) // for parsing application/json
+/**
+ * Express parsing
+ */
+app.use(express.json()) 
 app.use(express.urlencoded({ extended: true }));
 
-// Index route
+/**
+ * Index route
+ */
 app.get('/', (req, res) => res.render('index', { layout: 'landing' }));
 
-// Employee routes
+/**
+ * Router for employees resource
+ */
 app.use('/employees', require('./routes/employees'));
 
-// Comments routes
+/**
+ * Router for comments resource
+ */
 app.use('/comments', require('./routes/comments'));
 
 const PORT = process.env.PORT || 5000;

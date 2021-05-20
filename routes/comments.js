@@ -4,10 +4,17 @@ const Comments = require("../models/Comments");
 const Employees = require("../models/Employees");
 const { body, validationResult } = require("express-validator");
 
-// Display add employee form
+/**
+ * Display add employee form
+ */
 router.get("/add", (req, res) => res.render("addComment"));
 
-// Add comment
+/**
+ * Add new comment
+ * @param {string} comment_content
+ * @param {string} author
+ * @param {string} employee_name
+ */
 router.post(
   "/add",
   body(
@@ -16,6 +23,7 @@ router.post(
   ).isString(),
   async (req, res) => {
     let { employee_name, comment_content, author } = req.body;
+
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -45,7 +53,11 @@ router.post(
   }
 );
 
-// Update comment
+/**
+ * Update employee information
+ * @param {string} comment_content
+ * @param {string} author
+ */
 router.put(
   "/:id",
   body(
@@ -81,7 +93,9 @@ router.put(
   }
 );
 
-// Get a comments list
+/**
+ * Get comments list
+ */
 router.get("/", async (req, res) => {
   const comments = await Comments.findAll({
     raw: true,
@@ -89,7 +103,10 @@ router.get("/", async (req, res) => {
   res.render("comments", { comments });
 });
 
-// Get a comment by employee id
+/**
+ * Get comments by employee id
+ * @param {number} id
+ */
 router.get("/employee/:id", async (req, res) => {
   const id = req.params.id;
   const comments = await Comments.findAll({
@@ -100,7 +117,10 @@ router.get("/employee/:id", async (req, res) => {
   res.render("comments", { comments });
 });
 
-// Get a comment by id
+/**
+ * Get single comment by id
+ * @param {number} id
+ */
 router.get("/:id", async (req, res) => {
   const id = req.params.id;
   const comment = await Comments.findByPk(id);
@@ -110,7 +130,10 @@ router.get("/:id", async (req, res) => {
   res.status(404).json({ msg: "Comment not found." });
 });
 
-// Delete comment by id
+/**
+ * Delete single comment by id
+ * @param {number} id
+ */
 router.delete("/:id", async (req, res) => {
   const id = req.params.id;
   const comment = await Comments.findByPk(id);
@@ -126,7 +149,10 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Delete all comments related to employee
+/**
+ * Delete all comments related to employee
+ * @param {number} id
+ */
 router.delete("/employee/:id", async (req, res) => {
   const id = req.params.id;
   const employee = await Employees.findByPk(id);

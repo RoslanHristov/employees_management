@@ -1,0 +1,138 @@
+const express = require("express");
+const router = express.Router();
+const Comments = require("../models/Comments");
+const Employees = require("../models/Employees");
+const { body, validationResult } = require("express-validator");
+
+// Add comment
+router.post(
+  "/add",
+  body(
+    ["comment_content", "author"],
+    "Please provide a valid string value"
+  ).isString(),
+  body("employee_id", "Value should be an integer").isNumeric({ min: 1 }),
+  async (req, res) => {
+    let { employee_id, comment_content, author } = req.body;
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const employee = await Employees.findByPk(employee_id);
+      // bail out early if employee is not found
+      if (!employee) {
+        return res.status(404).json({ msg: "Employee record not found" });
+      }
+
+      // Insert into table
+      const newComment = await Comments.create({
+        comment_content,
+        author,
+        employee_id,
+      });
+      res.json(newComment);
+      res.redirect("/add");
+    } catch (e) {
+      throw new Error(`Something went wrong while adding new comment: ${e}`);
+    }
+  }
+);
+
+// Update comment
+router.put(
+  "/:id",
+  body(
+    ["comment_content", "author"],
+    "Please provide a valid string value"
+  ).isString(),
+  async (req, res) => {
+    const id = req.params.id;
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const comment = await Comments.findByPk(id);
+      // bail out early if comment is not found
+      if (!comment) {
+        return res.status(404).json({ msg: "Comment not found" });
+      }
+
+      let updatePayload = req.body;
+
+      // Update payload properties
+      for (const key of Object.keys(updatePayload)) {
+        comment[key] = updatePayload[key];
+      }
+
+      await comment.save();
+      res.json(comment);
+    } catch (error) {
+      throw new Error(`Something went wrong while updating comment: ${error}`);
+    }
+  }
+);
+
+// Get a comments list
+router.get("/", async (req, res) => {
+  const comments = await Comments.findAll({
+    raw : true
+  });
+  await res.render("comments", { comments });
+});
+
+// Get a comment by id
+router.get("/:id", async (req, res) => {
+  const id = req.params.id;
+  const comment = await Comments.findByPk(id);
+  if (comment) {
+    res.json(comment);
+  }
+  res.status(404).json({ msg: "Comment not found." });
+});
+
+// Delete comment by id
+router.delete("/:id", async (req, res) => {
+  const id = req.params.id;
+  const comment = await Comments.findByPk(id);
+  if (comment) {
+    await Comments.destroy({
+      where: {
+        id: comment.id,
+      },
+    });
+    res.json({ msg: `Comment was successfully deleted` });
+  } else {
+    res.status(404).json({ msg: "Comment not found." });
+  }
+});
+
+// Delete all comments related to employee
+router.delete("/employee/:id", async (req, res) => {
+  const id = req.params.id;
+  const employee = await Employees.findByPk(id);
+  // bail out early if employee is not found
+  if (!employee) {
+    return res.status(404).json({ msg: "Employee not found" });
+  }
+
+  try {
+    await Comments.destroy({
+      where: {
+        employee_id,
+      },
+    });
+    res.json({
+      msg: `All comments related to employee record are successfully deleted`,
+    });
+  } catch (e) {
+    throw new Error(
+      `Something went wrong while deleting all employee comments: ${e}`
+    );
+  }
+});
+
+module.exports = router;

@@ -8,9 +8,12 @@ const Comments = db.define('comments', {
   author: {
     type: Sequelize.STRING
   },
-  employee_id: {
-    type: Sequelize.NUMBER
-  }
+  employee_name: {
+    type: Sequelize.STRING
+  },
+  employee_id:{
+      type: Sequelize.INTEGER
+    }
 });
 
 Comments.associate = (models) => {

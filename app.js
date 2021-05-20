@@ -18,6 +18,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true }));
 
+// Index route
+app.get('/', (req, res) => res.render('index', { layout: 'landing' }));
+
 // Employee routes
 app.use('/employees', require('./routes/employees'));
 

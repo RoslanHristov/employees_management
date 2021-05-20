@@ -15,3 +15,13 @@ npm start
 
 ## Dev Server (Nodemon)
 npm run dev
+
+#
+# Developer Note
+> Updating of comments content is not implemented in to the UI due to lack of time.
+
+>However the route logic is implemented and can be tested trough "Postman" for example.
+
+> First time using express and postgres :) 
+
+Enjoy !

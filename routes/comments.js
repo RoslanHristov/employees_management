@@ -82,11 +82,14 @@ router.put(
 
       // Update payload properties
       for (const key of Object.keys(updatePayload)) {
-        comment[key] = updatePayload[key];
+        // prevent updating employee id related to comment
+        if (key !== "employee_id") {
+          comment[key] = updatePayload[key];
+        }
       }
 
       await comment.save();
-      res.redirect("/");
+      res.json(comment);
     } catch (error) {
       throw new Error(`Something went wrong while updating comment: ${error}`);
     }
@@ -100,7 +103,8 @@ router.get("/", async (req, res) => {
   const comments = await Comments.findAll({
     raw: true,
   });
-  res.render("comments", { comments });
+  res.json(comments);
+  // res.render("comments", { comments });
 });
 
 /**
